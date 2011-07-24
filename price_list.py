@@ -47,6 +47,13 @@ class Product(ModelSQL, ModelView):
     def get_cost_price(self, product):
         """Returns the validated cost_price against uom, currency and quantity
 
+        The `context` here is expected to hold the following values
+        which are used in this method:
+
+            * uom : ID of Unit of Measure used in Sale Order
+            * currency : ID of current Sale Order Currency
+            * sale_date : Date of Sale Order
+
         :param product: Browse Record of product
         :return: Cost Price of the product
         """
@@ -59,6 +66,7 @@ class Product(ModelSQL, ModelView):
 
         cost_price = product.cost_price
 
+        uom = None
         if Transaction().context.get('uom'):
             uom = uom_obj.browse(Transaction().context.get('uom'))
 
